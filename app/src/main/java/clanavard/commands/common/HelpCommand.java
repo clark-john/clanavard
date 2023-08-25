@@ -42,8 +42,6 @@ public class HelpCommand extends Command {
 				b = new CommandsFieldBuilder(category);
 			}
 
-			b.addCommand(info.name(), info.description());
-
 			index++;
 
 			isLast = commands.size() == index;
@@ -52,8 +50,9 @@ public class HelpCommand extends Command {
 				builder.addField(b.build());
 				category = newCategory;
 				b = new CommandsFieldBuilder(category);
-				b.addCommand(info.name(), info.description());
-			}
+			} 
+
+			b.addCommand(info.name(), info.description());
 
 			if (isLast) {
 				builder.addField(b.build());
