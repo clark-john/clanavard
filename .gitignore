@@ -2,5 +2,6 @@
 build
 bin
 .env
-logo.png
+*.png
 .settings
+*.db

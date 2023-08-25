@@ -9,5 +9,13 @@ public class Utils {
 		} catch (IndexOutOfBoundsException e){
 			return null;
 		}
-	}	
+	}
+
+	public static String getResource(String file){
+		try {
+			return new String(Utils.class.getClassLoader().getResourceAsStream(file).readAllBytes());
+		} catch (Exception e){
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -5,14 +5,15 @@ import java.util.List;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public abstract class Command {
-	private CommandName name;
+	private CommandInfo info;
+	
 	protected Command(){
-		name = getClass().getDeclaredAnnotation(CommandName.class);
+		info = getClass().getDeclaredAnnotation(CommandInfo.class);
 		if (
-			(getClass().getDeclaredAnnotation(CommandSubclass.class) == null && name == null) ||
-			name == null
+			(getClass().getDeclaredAnnotation(CommandSubclass.class) == null && info == null) ||
+			info == null
 		) {
-			throw new NullPointerException("Command name annotation is required!");
+			throw new NullPointerException("Command info annotation is required!");
 		}
 	}
 
@@ -21,4 +22,8 @@ public abstract class Command {
 	}
 
 	public abstract void handle(MessageReceivedEvent event, List<String> args);
+
+	public CommandInfo getCommandInfo(){
+		return info;
+	}
 }

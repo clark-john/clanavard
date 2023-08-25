@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import clanavard.commands.Command;
+import clanavard.commands.CommandInfo;
 import clanavard.commands.CommandName;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -37,7 +38,7 @@ public class CommandProcessor {
 
 		if (content.startsWith(prefix)) {
 			comm = commands.stream().filter(x -> {
-				String name = x.getClass().getDeclaredAnnotation(CommandName.class).value();
+				String name = x.getClass().getDeclaredAnnotation(CommandInfo.class).name();
 				return rawArgs.get(0).equals(prefix + name);
 			}).findFirst().orElse(null);
 
