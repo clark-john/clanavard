@@ -18,6 +18,7 @@ public class MuteCommand extends AdminCommand {
 				third arg: "reason"
 			*/
 			// event.getGuild().getMemberById("dsfsd").time
+			// event.getGuild().getMemberById("1312323123").timeoutFor(Duration.);
 			// event.getGuild().getMemberById("1312323123").mute(true).queue();
 			// sendMessage(event, "still in construction");
 		}

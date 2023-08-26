@@ -1,10 +1,10 @@
 package clanavard;
 
 import java.util.Arrays;
-// import java.util.Date;
 import java.util.List;
 
 import clanavard.db.Database;
+// import clanavard.internal.DurationParser;
 import clanavard.listeners.MessageListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -14,7 +14,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App implements Runnable {
 	public static void main(String[] args) {
-		// new Date()
+		// var parser = new DurationParser();
+		// System.out.println(parser.parse("3m 45s 5h"));
 		new Thread(new App()).start();
 	}
 
