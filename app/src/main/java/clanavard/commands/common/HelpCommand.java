@@ -3,6 +3,7 @@ package clanavard.commands.common;
 import java.awt.Color;
 import java.util.List;
 
+import clanavard.commands.Category;
 import clanavard.commands.Command;
 import clanavard.commands.CommandInfo;
 import clanavard.embed.CommandsFieldBuilder;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-@CommandInfo(name = "help", description = "", category = "")
+@CommandInfo(name = "help", description = "", category = Category.NONE)
 public class HelpCommand extends Command {
 	private MessageEmbed embed;
 
@@ -35,7 +36,7 @@ public class HelpCommand extends Command {
 		for (Command comm : commands) {
 
 			CommandInfo info = comm.getCommandInfo();
-			newCategory = info.category();
+			newCategory = info.category().getValue();
 			
 			if (category == null){
 				category = newCategory;
@@ -50,9 +51,11 @@ public class HelpCommand extends Command {
 				builder.addField(b.build());
 				category = newCategory;
 				b = new CommandsFieldBuilder(category);
-			} 
+			}
 
-			b.addCommand(info.name(), info.description());
+			String n = info.name();
+
+			b.addCommand(!info.args().equals("") ? n.concat(" " + info.args()) : n, info.description());
 
 			if (isLast) {
 				builder.addField(b.build());

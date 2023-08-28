@@ -5,6 +5,7 @@ import java.util.List;
 
 import clanavard.db.Database;
 // import clanavard.internal.DurationParser;
+import clanavard.listeners.BirthdayListener;
 import clanavard.listeners.MessageListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -14,8 +15,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App implements Runnable {
 	public static void main(String[] args) {
-		// var parser = new DurationParser();
-		// System.out.println(parser.parse("3m 45s 5h"));
 		new Thread(new App()).start();
 	}
 
@@ -24,7 +23,7 @@ public class App implements Runnable {
 		Dotenv dotenv = Dotenv.load();
 		String token;
 
-		String env = dotenv.get("JAVA_ENV");
+		String env = System.getenv("JAVA_ENV");
 
 		if (env != null && env.equals("PROD")) {
 			token = dotenv.get("BOT_TOKEN");
@@ -45,7 +44,10 @@ public class App implements Runnable {
 		);
 
 		JDA jda = JDABuilder.create(token, intents)
-			.addEventListeners(new MessageListener())
+			.addEventListeners(
+				new MessageListener(),
+				new BirthdayListener()
+			)
 			.setActivity(Activity.playing("c?help"))
 			.build();
 

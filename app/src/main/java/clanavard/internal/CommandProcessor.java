@@ -5,7 +5,6 @@ import java.util.List;
 
 import clanavard.commands.Command;
 import clanavard.commands.CommandInfo;
-import clanavard.commands.CommandName;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandProcessor {
@@ -28,7 +27,7 @@ public class CommandProcessor {
 		}
 
 		List<String> args = null;
-		List<String> rawArgs = Arrays.asList(content.split(" "));
+		List<String> rawArgs = Arrays.asList(content.split("\\s+"));
 
 		if (rawArgs.size() > 1){
 			args = rawArgs.subList(1, rawArgs.size());
@@ -44,7 +43,7 @@ public class CommandProcessor {
 
 			if (comm == null) {
 				event.getMessage().getChannel().sendMessage(
-					String.format("Unknown command \"**%s**\"", content.replace(prefix, ""))
+					String.format("Unknown command \"**%s**\"", content.replace(rawArgs.get(0), "").strip())
 				).queue();
 				return;
 			}

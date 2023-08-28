@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 public @interface CommandInfo {
 	String name();
 	String description();
-	String category();
+	Category category();
 	String args() default "";
 }

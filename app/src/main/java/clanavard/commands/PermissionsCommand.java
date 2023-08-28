@@ -14,7 +14,7 @@ public class PermissionsCommand extends Command {
 	}
 	public void handle(MessageReceivedEvent event, List<String> args) {
 		if (!event.getMessage().getMember().hasPermission(requiredPermissions)) {
-			sendMessage(event, "You're not eligible to perform this command.");
+			sendMessage(event, "You're not eligible to run this command.");
 			return;
 		}
 		isAllowed = true;

@@ -3,56 +3,85 @@ package clanavard.internal;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.google.common.primitives.Ints;
-import org.javatuples.Pair;
+
+import clanavard.structures.Pair;
 
 public class DurationParser {
 	public Duration parse(String humanReadableDate){
 		Duration dur = Duration.ZERO;
 		List<String> tokens = Arrays.asList(humanReadableDate.split(" "));
+
+		if (!isValidInput(humanReadableDate)) {
+			return null;
+		}
+
 		for (String token : tokens) {
 			dur = dur.plus(toDuration(parseTime(token)));
 		}
+
 		return dur;
 	}
 
 	private Pair<String, Integer> parseTime(String time){
-		Stream<String> str = Arrays.asList("s", "m", "h", "d").stream();
-		String unit = str.filter(x -> time.endsWith(x)).findFirst().orElse(null);
+		Stream<String> str = Arrays.asList("s", "m", "h").stream();
+
+		String unit = str
+			.filter(x -> time.endsWith(x) || time.endsWith(x.toUpperCase()))
+			.findFirst()
+			.orElse(null);
+		
 		if (unit == null) {
-			throw new RuntimeException("Invalid time unit");
+			throw new RuntimeException("Invalid time format");
 		}
-		String stringInt = time.replace(unit, "");
+
+		String stringInt = time.toLowerCase().replace(unit, "");
 		return new Pair<>(unit, Ints.tryParse(stringInt));
 	}
 
-	private Duration toDuration(Pair<String, Integer> pair){
-		Duration dur = Duration.ZERO;
-		
-		String unit = pair.getValue0();
-		Integer value = pair.getValue1();
-
-		if (unit.equals("s")) {
-			dur = dur.plusSeconds(value);
-		} else if (unit.equals("m")) {
-			dur = dur.plusMinutes(value);
-		} else if (unit.equals("h")) {
-			dur = dur.plusHours(value);
-		} else if (unit.equals("d")) {
-			dur = dur.plusDays(value);
+	private boolean isValidInput(String date){
+		Pattern pat = Pattern.compile("\\b\\d{1,4}[smhSMH]\\b");
+		Matcher m = pat.matcher(date);
+		int count = (int) m.results().count();
+		if (count != date.split("\\s+").length){
+			return false;
 		}
-
-		return dur;
+		return true;
 	}
 
-	public int removeUnit(String time, String unit){
-		String t = time.replace(unit, "");
-		try {
-			return Integer.parseInt(t, 10);
-		} catch (NumberFormatException e){
-			throw new RuntimeException(e);
+	private Duration toDuration(Pair<String, Integer> pair){
+		String unit = pair.getFirst();
+		Integer value = pair.getSecond();
+
+		return switch (unit) {
+			case "s" -> Duration.ofSeconds(value);
+			case "m" -> Duration.ofMinutes(value);
+			case "h" -> Duration.ofHours(value);
+			default -> throw new RuntimeException("Invalid time unit");
+		};
+	}
+
+	public String toWord(Duration dur){
+		String s = "";
+
+		int hours = (int) dur.toHoursPart();
+		int minutes = (int) dur.toMinutesPart();
+		int seconds = (int) dur.toSecondsPart();
+
+		if (hours != 0) {
+			s = s.concat(hours + " hours ");
 		}
+		if (minutes != 0) {
+			s = s.concat(minutes + " minutes ");
+		}
+		if (seconds != 0) {
+			s = s.concat(seconds + " seconds ");
+		}
+
+		return s.stripTrailing();
 	}
 }
