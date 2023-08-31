@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>app</name>
-	<comment>Project app created by Buildship.</comment>
+	<name>clanavard-groovy-app</name>
+	<comment>Project clanavard-groovy-app created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -17,12 +17,13 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1692319084070</id>
+			<id>1693480671018</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
