@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 @CommandSubclass()
-public class PermissionsCommand extends Command {
+abstract class PermissionsCommand extends Command {
 	boolean isAllowed = false
 	private Permission[] requiredPermissions
 

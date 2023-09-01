@@ -10,12 +10,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 @CommandInfo(name = "kick", description = "Kick a member", category = Category.MODERATION, args = "[MEMBER]")
 class KickCommand extends PermissionsCommand {
-	public KickCommand(){
+	KickCommand(){
 		super(Permission.KICK_MEMBERS)
 	}
 
 	@Override
-	public void handle(MessageReceivedEvent event, List<String> args) {
+	void handle(MessageReceivedEvent event, List<String> args) {
 		super.handle(event, args)
 		if (isAllowed) {
 			if (args == null) {
@@ -32,7 +32,6 @@ class KickCommand extends PermissionsCommand {
 				sendMessage(event, "Successfully kicked **${mem.getEffectiveName()}**".toString())
 			} catch (Exception e) {
 				sendMessage(event, e.getMessage())
-				return
 			}
 		}
 	}

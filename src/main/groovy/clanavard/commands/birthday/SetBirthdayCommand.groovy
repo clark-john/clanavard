@@ -9,29 +9,37 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 @CommandInfo(
 	name = "setbirthday", 
-	description = "Set your birthday and the bot will greet a happy birthday for you." + 
-	" Date argument should be in this format DD-MM-YYYY", 
+	description = /Set your birthday and the bot will greet a happy birthday for you.
+    Date argument should be in this format DD-MM-YYYY/,
 	category = Category.BIRTHDAY,
 	args = "[DATE]"
 )
-public class SetBirthdayCommand extends Command {
+class SetBirthdayCommand extends Command {
 	private final BirthdayManager bdayman
 	private DateParser parser
 	
-	public SetBirthdayCommand(){
+	SetBirthdayCommand(){
 		super()
 		parser = new DateParser()
 		bdayman = new BirthdayManager(db)
 	}
 
 	@Override
-	public void handle(MessageReceivedEvent event, List<String> args) {
+	void handle(MessageReceivedEvent event, List<String> args) {
 		if (!args) {
 			sendMessage(event, "Provide a date of your birthday")
 			return
 		}
 
 		String date = args.get(0)
-		println parser.validate(date)
+
+		event.getMessage().getChannel().sendTyping().queue()
+
+		if (parser.validate(date)) {
+			bdayman.setBirthday(date, event.getAuthor().getId())
+			sendMessage(event, "Birthday successfully set.")
+		} else {
+			sendMessage(event, "Invalid date. It should be in this format: DD-MM-YYYY")
+		}
 	}
 }

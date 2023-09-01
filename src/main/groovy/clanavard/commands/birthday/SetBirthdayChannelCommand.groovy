@@ -17,13 +17,13 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 class SetBirthdayChannelCommand extends PermissionsCommand {
 	private final BirthdayManager bdayman
 
-	public SetBirthdayChannelCommand(){
+	SetBirthdayChannelCommand(){
 		super(Permission.MANAGE_CHANNEL)
 		bdayman = new BirthdayManager(db)
 	}
 
 	@Override
-	public void handle(MessageReceivedEvent event, List<String> args) {
+	void handle(MessageReceivedEvent event, List<String> args) {
 		super.handle(event, args)
 
 		String guildId = event.getGuild().getId()
@@ -32,13 +32,15 @@ class SetBirthdayChannelCommand extends PermissionsCommand {
 			if (args == null){
 				String channelId = event.getMessage().getChannel().asTextChannel().getId()
 				bdayman.setBirthdayChannel(channelId, guildId)
-				sendMessage(event, String.format("Successfully set the birthday channel to <#%s>", channelId))
+				sendMessage(event, "Successfully set the birthday channel to <#$channelId>".toString())
 				return
 			}
 
 			String channel = args.get(0)
 
-			TextChannel chan = event.getGuild().getTextChannelsByName(channel.replaceAll("#", ""), true)
+			TextChannel chan = event.getGuild().getTextChannelsByName(
+				channel.replaceAll("#", ""), true
+			)
 				.stream().findFirst().orElse(null)
 			
 			if (chan == null) {

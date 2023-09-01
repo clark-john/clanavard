@@ -3,6 +3,7 @@ package clanavard.commands
 enum Category {
 	BIRTHDAY ("Birthday"),
 	MODERATION ("Moderation"),
+	FUN ("Fun"),
 	NONE (null)
 
 	private String name

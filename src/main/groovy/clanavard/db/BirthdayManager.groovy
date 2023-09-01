@@ -1,75 +1,54 @@
 package clanavard.db
 
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.SQLException
+import org.apache.cayenne.ObjectContext
+import org.apache.cayenne.query.ObjectSelect
+import clanavard.db.models.Birthday
+import clanavard.db.models.Config
 
 class BirthdayManager {
-	private Connection conn
-	private PreparedStatement stmt
+	private ObjectContext ctx
 
 	BirthdayManager(Database db) {
-		conn = db.getConnection()
+		ctx = db.getObjectContext()
 	}
 
-	void setBirthdayChannel(String channelId, String guildId){
-		try {
-			stmt = conn.prepareStatement("update config set birthdayChannel = ? where guildId = ?")
-			stmt.setString(1, channelId)
-			stmt.setString(2, guildId)
-			stmt.execute()
-			stmt.close()
-		} catch (SQLException e){
-			e.printStackTrace()
-		}
+	void setBirthdayChannel(String channelId, String guildId){		
+		def config = ObjectSelect
+			.query(Config.class)
+			.where(Config.GUILD_ID.eq(guildId))
+			.selectFirst(ctx)
+			
+		if (!config.getBirthdayChannel()) {
+			config.setBirthdayChannel(channelId)
+			ctx.commitChanges()
+		}			
 	}
 
 	void setBirthday(String birthday, String userId){
-		try {
-			stmt = conn.prepareStatement("select * from birthdays where userId = ?")
-			stmt.setString(1, userId)
-			def set = stmt.executeQuery()
-			set.next()
+		def bday = ObjectSelect
+			.query(Birthday.class)
+			.where(Birthday.USER_ID.eq(userId))
+			.selectFirst(ctx)
 
-			String sql
-
-			if (!set.isFirst()) {
-				sql = "insert into birthdays (birthday, userId) values (?, ?)"
-			} else {
-				sql = "update birthdays set birthday = ? where userId = ?"
-			}
-
-			stmt = conn.prepareStatement(sql)
-
-			stmt.setString(1, birthday)
-			stmt.setString(2, userId)
-			stmt.execute()
-			stmt.close()
-		} catch (SQLException e){
-			e.printStackTrace()
+		if (!bday) {
+			def b = ctx.newObject(Birthday.class)
+			b.setUserId(userId)
+			b.setBirthday(birthday)
+		} else {
+			bday.setBirthday(birthday)
 		}
+		ctx.commitChanges()
 	}
 
-	// true if it is successfully deleted otherwise false if it doesn't exist/unsuccess
 	boolean unsetBirthday(String userId){
-		try {
-			stmt = conn.prepareStatement("select * from birthdays where userId = ?")
-			stmt.setString(1, userId)
-			def set = stmt.executeQuery()
-			set.next()
-
-			if (!set.isFirst()) {
-				return false
-			}
-
-			stmt = conn.prepareStatement("delete from birthdays where userId = ?")
-			stmt.setString(1, userId)
-			stmt.execute()
-			return true
-
-		} catch (SQLException e){
-			e.printStackTrace()
+		def bday = ObjectSelect.query(Birthday.class)
+			.where(Birthday.USER_ID.eq(userId))
+			.selectFirst(ctx)
+			
+		if (!bday) {
 			return false
 		}
+		ctx.deleteObject(bday)
+		return true
 	}
 }
