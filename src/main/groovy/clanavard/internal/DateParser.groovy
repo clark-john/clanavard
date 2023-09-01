@@ -6,14 +6,20 @@ import com.google.common.primitives.Ints
 
 class DateParser {
 	boolean validate(String date){
-		Stream<String> parts = Stream.of(date.split("-"))
+		def p = date.split("-")
+		Stream<String> parts = Stream.of(p)
+				
+		if (p.length != 3) {
+			return false
+		}
+		
 		boolean isAllValidNums = parts.allMatch({ Ints.tryParse(it) != null })
 		
 		if (!isAllValidNums) {
 			return false
 		}
 
-		parts = Stream.of(date.split("-"))
+		parts = Stream.of(p)
 		
 		def (
 			int first, 

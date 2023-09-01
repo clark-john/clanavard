@@ -3,6 +3,7 @@ package clanavard.commands.birthday
 import clanavard.commands.Category
 import clanavard.commands.Command
 import clanavard.commands.CommandInfo
+import clanavard.db.BirthdayManager
 import clanavard.internal.DateParser
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
@@ -14,10 +15,13 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 	args = "[DATE]"
 )
 public class SetBirthdayCommand extends Command {
+	private final BirthdayManager bdayman
 	private DateParser parser
+	
 	public SetBirthdayCommand(){
 		super()
 		parser = new DateParser()
+		bdayman = new BirthdayManager(db)
 	}
 
 	@Override
@@ -28,5 +32,6 @@ public class SetBirthdayCommand extends Command {
 		}
 
 		String date = args.get(0)
+		println parser.validate(date)
 	}
 }

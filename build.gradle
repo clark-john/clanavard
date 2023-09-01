@@ -34,6 +34,7 @@ dependencies {
 	implementation 'net.dv8tion:JDA:5.0.0-beta.13'
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 	implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
+	implementation 'org.apache.cayenne:cayenne-server:4.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

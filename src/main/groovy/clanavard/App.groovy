@@ -5,6 +5,9 @@ package clanavard
 
 import clanavard.db.Database
 import clanavard.listeners.MessageListener
+
+import org.apache.cayenne.ObjectContext
+import org.apache.cayenne.configuration.server.ServerRuntime
 import io.github.cdimascio.dotenv.Dotenv
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -12,15 +15,24 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 
 class App implements Runnable {
+	private ServerRuntime cayenne
+	private ObjectContext ctx
+	
   static void main(String[] args) {
 		new Thread(new App()).start()
 	}
 	
 	@Override
 	void run() {
-		Dotenv dotenv = Dotenv.load()
+		cayenne = ServerRuntime.builder()
+			.addConfig("cayenne-project.xml")
+			.build()
+		
+		ctx = cayenne.newContext()
+				
+		def dotenv = Dotenv.load()
 		def token
-		String env = System.getenv("JAVA_ENV");
+		def env = System.getenv("JAVA_ENV");
 		
 		if (env && env.toLowerCase() == "prod") {
 			token = dotenv.get("BOT_TOKEN")
@@ -32,8 +44,8 @@ class App implements Runnable {
 			throw new RuntimeException("No token provided")
 		}
 
-		Database db = Database.getInstance();
-		db.initialize();
+		Database db = Database.getInstance()
+		db.setObjectContext(ctx)		
 		
 		def intents = [GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES]
 		

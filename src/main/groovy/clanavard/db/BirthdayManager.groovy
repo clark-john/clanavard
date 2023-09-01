@@ -8,11 +8,11 @@ class BirthdayManager {
 	private Connection conn
 	private PreparedStatement stmt
 
-	public BirthdayManager(Database db) {
+	BirthdayManager(Database db) {
 		conn = db.getConnection()
 	}
 
-	public void setBirthdayChannel(String channelId, String guildId){
+	void setBirthdayChannel(String channelId, String guildId){
 		try {
 			stmt = conn.prepareStatement("update config set birthdayChannel = ? where guildId = ?")
 			stmt.setString(1, channelId)
@@ -24,7 +24,7 @@ class BirthdayManager {
 		}
 	}
 
-	public void setBirthday(String birthday, String userId){
+	void setBirthday(String birthday, String userId){
 		try {
 			stmt = conn.prepareStatement("select * from birthdays where userId = ?")
 			stmt.setString(1, userId)
@@ -51,7 +51,7 @@ class BirthdayManager {
 	}
 
 	// true if it is successfully deleted otherwise false if it doesn't exist/unsuccess
-	public boolean unsetBirthday(String userId){
+	boolean unsetBirthday(String userId){
 		try {
 			stmt = conn.prepareStatement("select * from birthdays where userId = ?")
 			stmt.setString(1, userId)

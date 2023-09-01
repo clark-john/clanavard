@@ -7,3 +7,4 @@
 # These are Windows script files and should use crlf
 *.bat           text eol=crlf
 
+src/main/groovy/clanavard/db/models/auto linguist-generated
