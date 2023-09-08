@@ -3,16 +3,16 @@ package clanavard
 import clanavard.db.Database
 import clanavard.listeners.BirthdayListener
 import clanavard.listeners.MessageListener
-
+import net.dv8tion.jda.api.JDA
 import org.apache.cayenne.ObjectContext
 import org.apache.cayenne.configuration.server.ServerRuntime
 import io.github.cdimascio.dotenv.Dotenv
-import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 
 class App implements Runnable {
+	private JDA jda
 	private ServerRuntime cayenne
 	private ObjectContext ctx
 	
@@ -42,17 +42,17 @@ class App implements Runnable {
 			throw new RuntimeException("No token provided")
 		}
 
-		Database db = Database.getInstance()
+		def db = Database.getInstance()
 		db.setObjectContext(ctx)
 		
 		def intents = [
 			GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES
 		]
 		
-		JDA jda = JDABuilder.create(token, intents)
+		jda = JDABuilder.create(token, intents)
 			.addEventListeners(
 				new MessageListener(),
-				 new BirthdayListener()
+				new BirthdayListener()
 			)
 			.setActivity(Activity.playing("c?help"))
 			.build()

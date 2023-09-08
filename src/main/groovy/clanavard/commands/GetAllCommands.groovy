@@ -22,7 +22,8 @@ class GetAllCommands {
 		]
 
 		def fun = [
-			new YesNoCommand()
+			new YesNoCommand(),
+			new TicTacToeCommand()
 		]
 
 		commands = [*moderation, *birthday, *fun]

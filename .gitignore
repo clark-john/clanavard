@@ -1,7 +1,4 @@
-# Ignore Gradle project-specific cache directory
 .gradle
-
-# Ignore Gradle build output directory
 build
 .settings
 bin
@@ -9,3 +6,4 @@ bin
 .env
 *.db
 .idea
+TicTacToe*

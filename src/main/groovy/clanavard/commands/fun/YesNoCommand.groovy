@@ -10,7 +10,6 @@ import clanavard.commands.Command
 import clanavard.commands.CommandInfo
 import clanavard.structures.YesNoResponse
 
-import com.google.gson.Gson
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.utils.FileUpload
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
@@ -53,7 +52,7 @@ class YesNoCommand extends Command {
 
     def res = client.newCall(req).execute()
 
-    Gson gson = Utils.getGson()
+    def gson = Utils.getGson()
 
     def resp = gson.fromJson(res.body().string(), YesNoResponse.class)
     

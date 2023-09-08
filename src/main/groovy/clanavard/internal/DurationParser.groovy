@@ -27,7 +27,7 @@ class DurationParser {
 		Stream<String> str = Arrays.asList("s", "m", "h").stream()
 
 		String unit = str
-			.filter({ time.endsWith(it) || time.endsWith(it.toUpperCase()) })
+			.filter { time.endsWith(it) || time.endsWith(it.toUpperCase()) }
 			.findFirst()
 			.orElse(null)
 		

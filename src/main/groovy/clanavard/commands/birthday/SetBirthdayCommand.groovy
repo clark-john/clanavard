@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 @CommandInfo(
 	name = "setbirthday", 
-	description = /Set your birthday and the bot will greet a happy birthday for you.
+	description = /Set your birthday and the bot will greet a happy birthday for you.\
     Date argument should be in this format DD-MM-YYYY/,
 	category = Category.BIRTHDAY,
 	args = "[DATE]"

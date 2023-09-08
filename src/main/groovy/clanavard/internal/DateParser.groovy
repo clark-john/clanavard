@@ -11,13 +11,13 @@ class DateParser {
 		def cal2 = Calendar.getInstance()
 		def streamSup = { -> Stream.of(date.split("-")) }
 
-		Stream<String> parts = streamSup()
+		def parts = streamSup()
 
 		if (streamSup().count() != 3) {
 			return false
 		}
 		
-		boolean isAllValidNums = parts.allMatch({ Ints.tryParse(it) != null })
+		boolean isAllValidNums = parts.allMatch { Ints.tryParse(it) != null }
 		
 		if (!isAllValidNums) {
 			return false
@@ -27,7 +27,9 @@ class DateParser {
 			int first,
 			int second,
 			int third
-		) = streamSup().map({ Integer.parseInt(it) }).toList()
+		) = streamSup()
+			.map { Integer.parseInt(it) }
+			.toList()
 
 		if (first > 31 || first < 1) {
 			return false
